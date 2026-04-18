@@ -30,7 +30,19 @@ Choose an option:
 
     switch(userInput){
       case '1':
-        print("You selected: Add Student");
+        print("Enter student name:");
+        var name = stdin.readLineSync();
+
+        var student = {
+          "name": name,
+          "scores": <int>[],
+          "subjects": {...availableSubjects},
+          "bonus": null,
+          "comment": null
+        };
+
+        students.add(student);
+        print("Student $name added successfully!\n");
         break;
 
       case '2':
@@ -66,4 +78,5 @@ Choose an option:
         print("Invalid option. Try again!");
     }
   }while (isRunning);
+
 }
