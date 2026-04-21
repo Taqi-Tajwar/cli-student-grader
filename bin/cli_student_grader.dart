@@ -35,22 +35,105 @@ Choose an option:
 
         var student = {
           "name": name,
-          "scores": <int>[],
+          "scores": <String, List<int>>{},
           "subjects": {...availableSubjects},
           "bonus": null,
           "comment": null
         };
 
         students.add(student);
-        print("Student $name added successfully!\n");
+        print("Student $name added successfully.\n");
         break;
 
       case '2':
-        print("You selected: Record Score");
+        if (students.isEmpty) {
+          print("No students available!\n");
+          break;
+        }
+
+        for (int i = 0; i < students.length; i++) {
+          print("$i. ${students[i]["name"]}");
+        }
+
+        print("Select student:");
+        int studentIndex = int.parse(stdin.readLineSync()!);
+
+        if (studentIndex < 0 || studentIndex >= students.length) {
+          print("Invalid student!\n");
+          break;
+        }
+
+        var student = students[studentIndex];
+
+        var subjectList = student["subjects"].toList();
+
+        for (int i = 0; i < subjectList.length; i++) {
+          print("$i. ${subjectList[i]}");
+        }
+
+        print("Select subject:");
+        int subjectIndex = int.parse(stdin.readLineSync()!);
+
+        if (subjectIndex < 0 || subjectIndex >= subjectList.length) {
+          print("Invalid subject!\n");
+          break;
+        }
+
+        var selectedSubject = subjectList[subjectIndex];
+
+        int score;
+        while (true) {
+          print("Enter score (0-100):");
+          score = int.parse(stdin.readLineSync()!);
+
+          if (score >= 0 && score <= 100) break;
+          print("Invalid! Try again.");
+        }
+
+        student["scores"][selectedSubject] ??= <int>[];
+
+        student["scores"][selectedSubject].add(score);
+
+        print("Score added to $selectedSubject!\n");
         break;
 
       case '3':
-        print("You selected: Add Bonus Points");
+        if (students.isEmpty) {
+          print("No students available!\n");
+          break;
+        }
+
+        print("Student List:");
+        for (int i = 0; i < students.length; i++) {
+          print("$i. ${students[i]["name"]}");
+        }
+
+        print("Select student:");
+        int index = int.parse(stdin.readLineSync()!);
+
+        if (index < 0 || index >= students.length) {
+          print("Invalid student!\n");
+          break;
+        }
+
+        var student = students[index];
+
+        int bonus;
+
+        while (true) {
+          print("Enter bonus (1-10):");
+          bonus = int.parse(stdin.readLineSync()!);
+
+          if (bonus >= 1 && bonus <= 10) break;
+          print("Invalid bonus! Try again.");
+        }
+
+        if (student["bonus"] == null) {
+          student["bonus"] ??= bonus;
+          print("Bonus added\n");
+        } else {
+          print("Bonus already exists: ${student["bonus"]}\n");
+        }
         break;
 
       case '4':
