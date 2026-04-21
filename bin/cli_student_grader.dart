@@ -137,7 +137,27 @@ Choose an option:
         break;
 
       case '4':
-        print("You selected: Add Comment");
+        if (students.isEmpty) {
+          print("No students!");
+          break;
+        }
+
+        for (int i = 0; i < students.length; i++) {
+          print("$i. ${students[i]["name"]}");
+        }
+
+        print("Select student:");
+        int index = int.parse(stdin.readLineSync()!);
+
+        print("Enter comment:");
+        String comment = stdin.readLineSync()!;
+
+        students[index]["comment"] = comment;
+
+        String display =
+            students[index]["comment"]?.toUpperCase() ?? "No comment";
+
+        print("Saved: $display");
         break;
 
       case '5':
