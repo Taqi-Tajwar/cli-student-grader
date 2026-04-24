@@ -161,11 +161,102 @@ Choose an option:
         break;
 
       case '5':
-        print("You selected: View All Students");
+        if (students.isEmpty) {
+          print("No students!\n");
+          break;
+        }
+
+        for (var s in students) {
+          var tags = [
+            s["name"],
+            "${s["scores"].length} scores",
+            if (s["bonus"] != null) "⭐ Has Bonus"
+          ];
+
+          print(tags);
+        }
+        print("");
         break;
 
       case '6':
-        print("You selected: View Report Card");
+        if (students.isEmpty) {
+          print("No students!\n");
+          break;
+        }
+
+        for (int i = 0; i < students.length; i++) {
+          print("$i. ${students[i]["name"]}");
+        }
+
+        print("Select student:");
+        int index = int.parse(stdin.readLineSync()!);
+
+        var s = students[index];
+        var scoresMap = s["scores"] as Map<String, List<int>>;
+
+        if (scoresMap.isEmpty) {
+          print("No scores!\n");
+          break;
+        }
+
+        int sum = 0;
+        int count = 0;
+
+        for (var subject in scoresMap.keys) {
+          for (var sc in scoresMap[subject]!) {
+            sum += sc;
+            count++;
+          }
+        }
+
+        if (count == 0) {
+          print("No scores!\n");
+          break;
+        }
+
+        double avg = sum / count;
+        double finalAvg = avg + (s["bonus"] ?? 0);
+
+        if (finalAvg > 100) finalAvg = 100;
+
+        String grade;
+        if (finalAvg >= 90) {
+          grade = "A";
+        } else if (finalAvg >= 80) {
+          grade = "B";
+        } else if (finalAvg >= 70) {
+          grade = "C";
+        } else if (finalAvg >= 60) {
+          grade = "D";
+        } else {
+          grade = "F";
+        }
+
+        String feedback = switch (grade) {
+          "A" => "Outstanding performance!",
+          "B" => "Good work!",
+          "C" => "Satisfactory.",
+          "D" => "Needs improvement.",
+          "F" => "Failing.",
+          _ => "Unknown"
+        };
+
+        String comment =
+            s["comment"]?.toUpperCase() ?? "No comment provided";
+
+        print("""
+╔══════════════════════════════╗
+║       REPORT CARD            ║
+╠══════════════════════════════╝
+║ Name: ${s["name"]}
+║ Scores: $scoresMap
+║ Bonus: +${s["bonus"] ?? 0}
+║ Average: $finalAvg
+║ Grade: $grade
+║ Comment: $comment
+║ Feedback: $feedback
+╚══════════════════════════════╝
+""");
         break;
 
       case '7':
