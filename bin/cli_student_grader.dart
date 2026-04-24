@@ -260,7 +260,72 @@ Choose an option:
         break;
 
       case '7':
-        print("You selected: Class Summary");
+        int total = students.length;
+        double totalAvg = 0;
+        double highest = 0;
+        double lowest = 100;
+        int count = 0;
+
+        Set<String> grades = {};
+
+        for (var s in students) {
+
+          var scoresMap = s["scores"] as Map<String, List<int>>;
+
+          if (scoresMap.isNotEmpty) {
+
+            int sum = 0;
+            int scoreCount = 0;
+            
+            for (var subject in scoresMap.keys) {
+              for (var sc in scoresMap[subject]!) {
+                sum += sc;
+                scoreCount++;
+              }
+            }
+
+            if (scoreCount == 0) continue;
+
+            double avg = sum / scoreCount;
+            avg += (s["bonus"] ?? 0);
+
+            if (avg > 100) avg = 100;
+
+            totalAvg += avg;
+            count++;
+
+            if (avg > highest) highest = avg;
+            if (avg < lowest) lowest = avg;
+
+            if (avg >= 90) {
+              grades.add("A");
+            } else if (avg >= 80) {
+              grades.add("B");
+            } else if (avg >= 70) {
+              grades.add("C");
+            } else if (avg >= 60) {
+              grades.add("D");
+            } else {
+              grades.add("F");
+            }
+          }
+        }
+
+        double classAvg = count > 0 ? totalAvg / count : 0;
+
+        var summaryLines = [
+          for (var s in students) "${s["name"]}"
+        ];
+
+        print("""
+===== CLASS SUMMARY =====
+Total Students: $total
+Class Average: $classAvg
+Highest: $highest
+Lowest: $lowest
+Students: $summaryLines
+Grades: $grades
+""");
         break;
 
       case '8':
